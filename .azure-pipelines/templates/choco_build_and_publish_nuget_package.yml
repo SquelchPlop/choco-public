@@ -31,7 +31,7 @@ stages:
         steps:
           - powershell: |
               Write-Host "Is master branch?: $(isMaster)"
-              if($(isMaster) -eq "True"){
+              if("$(isMaster)" -eq "True"){
                 $version = "${{ parameters.packageVersion}}" # If master branch, version should be set to the version specified exactly
               }else{
                 $version = "${{ parameters.packageVersion}}-pre$(buildCounter)" # If not master branch, version should have -pre{n} appended, where {n} increments on each build.
