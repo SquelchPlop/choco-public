@@ -1,0 +1,10 @@
+trigger:
+  paths:
+    include:
+      - microsoft-office-click-to-run/*
+
+extends:
+  template: ../.azure-pipelines/templates/choco_build_and_publish_nuget_package.yml
+  parameters:
+    package: microsoft-office-click-to-run
+    version: 1.0.0

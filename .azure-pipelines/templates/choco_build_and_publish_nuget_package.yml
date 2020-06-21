@@ -1,0 +1,39 @@
+parameters:
+  - name: package
+    type: string
+  - name: version
+    type: string
+
+variables:
+  ${{ if eq(variables['Build.SourceBranchName'], 'master') }}:
+    versionSuffix: ""
+  ${{ if ne(variables['Build.SourceBranchName'], 'master') }}:
+    buildCounter: $[counter(format('{0}-dev', parameters['version']), 1)]
+    versionSuffix: "-dev$(buildCounter)"
+
+jobs:
+  - job: Build_Choco
+    pool:
+      vmImage: 'windows-latest'
+    steps:
+      - script: choco pack ../${{ parameters.package }}/${{ parameters.package }}.nuspec --version ${{parameters.version}}${{variables.versionSuffix}}
+        workingDirectory: $(Build.ArtifactStagingDirectory)
+        displayName: Choco Pack
+      - publish: "./_build/"
+        artifact: NuGetPackage
+
+  - job: Publish_Choco
+    dependsOn: Build_Choco
+    steps:
+      - task: DownloadPipelineArtifact@2
+        inputs:
+          artifact: NuGetPackage
+          targetPath: $(Build.ArtifactStagingDirectory)
+      - task: NuGetAuthenticate@0
+        displayName: 'NuGet Authenticate'
+      - task: NuGetCommand@2
+        displayName: 'NuGet Push'
+        inputs:
+          command: push
+          publishVstsFeed: 'choco-public/choco-public'
+          allowPackageConflicts: true

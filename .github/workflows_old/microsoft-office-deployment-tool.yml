@@ -1,0 +1,52 @@
+# The below works for publishing NuGet packages.  However, NuGet packages uploaded to GitHub Packages
+# require the <repository> tag to be set in the .nuspec file.  Chocolatey won't create packages with
+# the <repository> tag - it has its own schema :/.
+
+# name: Create microsoft-office-deployment-tool NuGet package
+
+# on:
+#   push:
+#     paths:
+#       - 'microsoft-office-deployment-tool/**'
+
+# jobs:
+#   build:
+#     runs-on: windows-latest
+
+#     steps:
+#       - uses: actions/checkout@v2
+
+#       - name: Install Chocolatey
+#         run: Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+
+#       - name: Run "choco pack"
+#         run: |
+#           mkdir build
+#           cd build
+#           choco pack ../microsoft-office-deployment-tool/microsoft-office-deployment-tool.nuspec
+
+#       - name: Upload artifact
+#         uses: actions/upload-artifact@v2
+#         with:
+#           name: NuGet packages
+#           path: ./build/*.nupkg 
+
+#   publish:
+#     needs: build
+#     runs-on: windows-latest
+#     if: github.ref == 'refs/heads/master'
+
+#     steps:
+#       - uses: actions/setup-dotnet@v1
+      
+#       - uses: actions/download-artifact@master
+#         with:
+#           path: packages
+#           name: NuGet packages
+    
+#       - uses: warrenbuckley/Setup-Nuget@v1
+
+#       - name: Push generated package to GitHub Packages
+#         run: |
+#           nuget source Add -Name "GPR" -Source "https://nuget.pkg.github.com/SquelchPlop/index.json" -UserName SquelchPlop -Password ${{ secrets.GITHUB_TOKEN }}
+#           nuget push packages\**\*.nupkg -Source "GPR" -SkipDuplicate

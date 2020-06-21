@@ -1,0 +1,10 @@
+trigger:
+  paths:
+    include:
+      - microsoft-office-deployment-tool/*
+
+extends:
+  template: ../.azure-pipelines/templates/choco_build_and_publish_nuget_package.yml
+  parameters:
+    package: microsoft-office-deployment-tool
+    version: 16.0.12827.20258

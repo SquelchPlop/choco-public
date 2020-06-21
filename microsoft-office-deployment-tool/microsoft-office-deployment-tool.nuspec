@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- Do not remove this test for UTF-8: if “Ω” doesn’t appear as greek uppercase omega letter enclosed in quotation marks, you should use an editor that supports UTF-8, not this one. -->
+<package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd"><!-- Latest nuspec at https://github.com/NuGet/NuGet.Client/blob/dev/src/NuGet.Core/NuGet.Packaging/compiler/resources/nuspec.xsd -->
+  <metadata>
+    <!-- Required NuGet properties -->
+    <id>microsoft-office-deployment-tool</id>
+    <version>0.0</version><!-- Version set in azure-pipelines.yml -->
+    <authors>Microsoft</authors>
+    <description>
+      This will only install the Microsoft Office Deployment Tool (also known as the "Click-to-Run Administrator Tool").
+      
+      The `setup.exe` is made available in the package.  The `setup.exe` can then be used for installing/uninstalling Office products with `configuration.xml` files.
+      Also see the "Microsoft Office Click-to-Run" package for installing Office with this package.
+    </description>
+    <!-- End required NuGet properties -->
+    <!-- Optional NuGet properties -->
+    <title>Microsoft Office Deployment Tool</title>
+    <owners>Matt Hadley</owners>
+    <licenseUrl>https://technet.microsoft.com/en-us/library/gg982959.aspx</licenseUrl>
+    <projectUrl>https://docs.microsoft.com/en-us/deployoffice/overview-office-deployment-tool</projectUrl>
+    <iconUrl>https://github.com/SquelchPlop/choco-public/raw/master/microsoft-office-deployment-tool/icons/microsoft-office-deployment-tool.png</iconUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <summary>Installs the Microsoft Office Deployment Tool only.</summary>
+    <releaseNotes>https://docs.microsoft.com/en-us/officeupdates/odt-release-history</releaseNotes>
+    <copyright>© Microsoft 2020</copyright>
+    <tags>office-deployment-tool Microsoft Office Deployment Tool</tags>
+    <!-- End optional NuGet properties-->
+    <!-- Custom Chocolatey properties -->
+    <packageSourceUrl>https://github.com/SquelchPlop/choco-public/tree/master/microsoft-office-deployment-tool/</packageSourceUrl>
+    <docsUrl>https://docs.microsoft.com/en-us/deployoffice/office-deployment-tool-configuration-options</docsUrl>
+    <mailingListUrl>https://go.microsoft.com/fwlink/?LinkId=400427</mailingListUrl>
+    <bugTrackerUrl>https://support.office.com/en-us/home/chat?ContactUsExperienceEntryPointAssetId=S.HP.Main</bugTrackerUrl>
+    <!-- End custom Chocolatey properties-->
+  </metadata>
+  <files>
+    <file src="bin\**" target="bin" />
+    <file src="tools\**" target="tools" />
+  </files>
+</package>

@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- Do not remove this test for UTF-8: if “Ω” doesn’t appear as greek uppercase omega letter enclosed in quotation marks, you should use an editor that supports UTF-8, not this one. -->
+<package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd"><!-- Latest nuspec at https://github.com/NuGet/NuGet.Client/blob/dev/src/NuGet.Core/NuGet.Packaging/compiler/resources/nuspec.xsd -->
+  <metadata>
+    <!-- Required NuGet properties -->
+    <id>microsoft-office-click-to-run</id>
+    <version>0.0</version><!-- Version set in azure-pipelines.yml -->
+    <authors>Microsoft</authors>
+    <description>
+      You must specify the path to a [`configuration.xml`](https://docs.microsoft.com/en-us/deployoffice/office-deployment-tool-configuration-options) file for installation and (optionally) uninstallation.
+      Configuration files can be generated using the [Office 365 Configuration Service](https://config.office.com/) for 2019 Volume License editions and Microsoft 365 Apps for enterprise/business.
+
+      ## Package Parameters
+      - `choco install microsoft-office-click-to-run --params /configuration-xml-file:C:\pathtomy\configuration.xml` installs the version of Office you specify within `C:\pathtomy\configuration.xml`
+        - Note: the `configuration-xml-file` *must* be specified, otherwise installation will fail.
+      - `choco uninstall microsoft-office-click-to-run` will attempt to uninstall _all_ Office components installed through Click-to-Run.
+      - `choco uninstall microsoft-office-click-to-run --params /configuration-xml-file:C:\pathtomy\configuration_uninstall.xml` will try to remove the components you specify for removal within `C:\pathtomy\configuration_uninstall.xml`.
+
+      ## Upgrades and Updates
+      - Click-to-Run is a wrapper around the installers for Office.
+        - This means that whilst the version of this Click-to-Run package may change, the installed versions of Office will depend on the update channel and target version you speicfy in `configuration.xml`.
+        - Force reinstalling or upgrading this Click-to-Run package will simply re-apply your `configuration.xml`:
+          - If your `configuration.xml` specifies "current" as the update channel, and your Office installation is already "current", Click-to-Run will not make any changes.
+          - If your `configuration.xml` specifies "current" as the update channel, and your Office installation is behind the "current" branch, Click-to-Run will update your Office installation.
+          - If your `configuration.xml` specifies "2005" as the target version, and your Office installation is already version "2005", Click-to-Run will not make any changes.
+          - If your `configuration.xml` specifies "2005" as the target version, and your Office installation is version "2004", Click-to-Run will update your Office installation.
+
+      ## Dependencies
+      This package depends on the Microsoft Office Deployment Tool package being installed.
+      This Click-to-Run takes your `configuration.xml` file and applies it using the Microsoft Office Deployment Tool.
+    </description>
+    <!-- End required NuGet properties -->
+    <!-- Optional NuGet properties -->
+    <title>Microsoft Office Click-to-Run</title>
+    <owners>Matt Hadley</owners>
+    <licenseUrl>https://technet.microsoft.com/en-us/library/gg982959.aspx</licenseUrl>
+    <projectUrl>https://office.microsoft.com/</projectUrl>
+    <iconUrl>https://github.com/SquelchPlop/choco-public/raw/master/microsoft-office-click-to-run/icons/microsoft-office-click-to-run.png</iconUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <summary>Installs Microsoft Office using the Click-to-Run installer from the Microsoft Office Deployment Tool.</summary>
+    <releaseNotes>https://docs.microsoft.com/officeupdates/release-notes-microsoft365-apps</releaseNotes>
+    <copyright>© Microsoft 2020</copyright>
+    <tags>office-click-to-run Microsoft Office Click-to-Run 365</tags>
+    <!-- End optional NuGet properties-->
+    <!-- Custom Chocolatey properties -->
+    <projectSourceUrl>https://github.com/SquelchPlop/choco-public/tree/master/microsoft-office-click-to-run/</projectSourceUrl>
+    <docsUrl>https://docs.microsoft.com/office/</docsUrl>
+    <mailingListUrl>https://go.microsoft.com/fwlink/?LinkId=400427</mailingListUrl>
+    <bugTrackerUrl>https://support.office.com/en-us/home/chat?ContactUsExperienceEntryPointAssetId=S.HP.Main</bugTrackerUrl>
+    <!-- End custom Chocolatey properties-->   
+    <dependencies>
+      <dependency id="microsoft-office-deployment-tool" version="16.0.12827.20258" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="tools\**" target="tools" />
+  </files>
+</package>

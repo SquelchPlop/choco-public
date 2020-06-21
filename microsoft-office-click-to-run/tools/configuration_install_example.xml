@@ -1,0 +1,40 @@
+<Configuration>
+    <Add OfficeClientEdition="64" Channel="Current" AllowCdnFallback="True">
+        <Product ID="O365ProPlusRetail">
+            <Language ID="MatchOS" />
+            <ExcludeApp ID="Access" />
+            <ExcludeApp ID="Groove" />
+            <ExcludeApp ID="Lync" />
+            <ExcludeApp ID="OneDrive" />
+            <ExcludeApp ID="OneNote" />
+            <ExcludeApp ID="Teams" />
+        </Product>
+    </Add>
+    <Property Name="PinIconsToTaskbar" Value="FALSE" />
+    <Property Name="AUTOACTIVATE" Value="1" />
+    <Property Name="FORCEAPPSHUTDOWN" Value="FALSE" />
+    <Updates Enabled="TRUE" />
+    <Display Level="None" AcceptEULA="TRUE" />
+    <RemoveMSI />
+    <AppSettings>
+        <User Key="software\microsoft\office\16.0\common" Name="sendcustomerdata" Value="0" Type="REG_DWORD" App="office16" Id="L_Sendcustomerdata" />
+        <User Key="software\microsoft\office\16.0\common\general" Name="shownfirstrunoptin" Value="1" Type="REG_DWORD" App="office16" Id="L_DisableOptinWizard" />
+        <User Key="software\microsoft\office\16.0\common" Name="qmenable" Value="0" Type="REG_DWORD" App="office16" Id="L_EnableCustomerExperienceImprovementProgram" />
+        <User Key="software\microsoft\office\16.0\common" Name="updatereliabilitydata" Value="0" Type="REG_DWORD" App="office16" Id="L_UpdateReliabilityPolicy" />
+        <User Key="software\microsoft\office\16.0\common\general" Name="optindisable" Value="1" Type="REG_DWORD" App="office16" Id="L_SuppressRecommendedSettingsDialog" />
+        <User Key="software\microsoft\office\16.0\common\feedback" Name="enabled" Value="0" Type="REG_DWORD" App="office16" Id="L_SendFeedback" />
+        <User Key="software\microsoft\office\16.0\firstrun" Name="disablemovie" Value="1" Type="REG_DWORD" App="office16" Id="L_DisableMovie" />
+        <User Key="software\microsoft\office\16.0\firstrun" Name="bootedrtm" Value="1" Type="REG_DWORD" App="office16" Id="L_DisableOfficeFirstrun" />
+        <User Key="software\microsoft\office\16.0\excel" Name="dontshowwhatsnew" Value="1" Type="REG_DWORD" App="office16" Id="L_DontShowWhatsNewInformationExcel" />
+        <User Key="software\microsoft\office\16.0\powerpoint" Name="dontshowwhatsnew" Value="1" Type="REG_DWORD" App="office16" Id="L_DontShowWhatsNewInformationPowerPoint" />
+        <User Key="software\microsoft\office\16.0\outlook" Name="dontshowwhatsnew" Value="1" Type="REG_DWORD" App="office16" Id="L_DontShowWhatsNewInformationOutlook" />
+        <User Key="software\microsoft\office\16.0\onenote" Name="dontshowwhatsnew" Value="1" Type="REG_DWORD" App="office16" Id="L_DontShowWhatsNewInformationOneNote" />
+        <User Key="software\microsoft\office\16.0\word" Name="dontshowwhatsnew" Value="1" Type="REG_DWORD" App="office16" Id="L_DontShowWhatsNewInformationWord" />
+        <User Key="software\microsoft\office\16.0\common" Name="linkedin" Value="0" Type="REG_DWORD" App="office16" Id="L_AllowLinkedInFeatures" />
+        <User Key="software\microsoft\office\16.0\common\general" Name="disablecomingsoon" Value="1" Type="REG_DWORD" App="office16" Id="L_DisableComingSoon" />
+        <User Key="software\microsoft\office\16.0\common" Name="insiderslabbehavior" Value="2" Type="REG_DWORD" App="office16" Id="L_OfficeInsiderUserExperience" />
+        <User Key="software\microsoft\office\16.0\excel\options" Name="defaultformat" Value="51" Type="REG_DWORD" App="excel16" Id="L_SaveExcelfilesas" />
+        <User Key="software\microsoft\office\16.0\powerpoint\options" Name="defaultformat" Value="27" Type="REG_DWORD" App="ppt16" Id="L_SavePowerPointfilesas" />
+        <User Key="software\microsoft\office\16.0\word\options" Name="defaultformat" Value="" Type="REG_SZ" App="word16" Id="L_SaveWordfilesas" />
+    </AppSettings>
+</Configuration>

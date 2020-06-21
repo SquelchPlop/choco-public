@@ -1,0 +1,61 @@
+<Configuration>
+    <Remove>
+        <Product ID="Access2019Retail"></Product>
+        <Product ID="Access2019Volume"></Product>
+        <Product ID="AccessRetail"></Product>
+        <Product ID="Excel2019Retail"></Product>
+        <Product ID="Excel2019Volume"></Product>
+        <Product ID="ExcelRetail"></Product>
+        <Product ID="HomeBusiness2019Retail"></Product>
+        <Product ID="HomeBusinessRetail"></Product>
+        <Product ID="HomeStudent2019Retail"></Product>
+        <Product ID="HomeStudentRetail"></Product>
+        <Product ID="InfoPathRetail"></Product>
+        <Product ID="LyncEntryRetail"></Product>
+        <Product ID="LyncRetail"></Product>
+        <Product ID="O365BusinessRetail"></Product>
+        <Product ID="O365HomePremRetail"></Product>
+        <Product ID="O365ProPlusRetail"></Product>
+        <Product ID="O365SmallBusPremRetail"></Product>
+        <Product ID="OneNoteRetail"></Product>
+        <Product ID="Outlook2019Retail"></Product>
+        <Product ID="Outlook2019Volume"></Product>
+        <Product ID="OutlookRetail"></Product>
+        <Product ID="Personal2019Retail"></Product>
+        <Product ID="PersonalRetail"></Product>
+        <Product ID="PowerPoint2019Retail"></Product>
+        <Product ID="PowerPoint2019Volume"></Product>
+        <Product ID="PowerPointRetail"></Product>
+        <Product ID="ProPlus2019Volume"></Product>
+        <Product ID="ProPlusRetail"></Product>
+        <Product ID="Professional2019Retail"></Product>
+        <Product ID="ProfessionalRetail"></Product>
+        <Product ID="ProjectPro2019Retail"></Product>
+        <Product ID="ProjectPro2019Volume"></Product>
+        <Product ID="ProjectProRetail"></Product>
+        <Product ID="ProjectProXVolume"></Product>
+        <Product ID="ProjectStd2019Retail"></Product>
+        <Product ID="ProjectStd2019Volume"></Product>
+        <Product ID="ProjectStdRetail"></Product>
+        <Product ID="ProjectStdXVolume"></Product>
+        <Product ID="Publisher2019Retail"></Product>
+        <Product ID="Publisher2019Volume"></Product>
+        <Product ID="PublisherRetail"></Product>
+        <Product ID="SPDRetail"></Product>
+        <Product ID="SkypeforBusinessEntryRetail"></Product>
+        <Product ID="SkypeforBusinessRetail"></Product>
+        <Product ID="Standard2019Volume"></Product>
+        <Product ID="VisioPro2019Retail"></Product>
+        <Product ID="VisioPro2019Volume"></Product>
+        <Product ID="VisioProRetail"></Product>
+        <Product ID="VisioProXVolume"></Product>
+        <Product ID="VisioStd2019Retail"></Product>
+        <Product ID="VisioStd2019Volume"></Product>
+        <Product ID="VisioStdRetail"></Product>
+        <Product ID="VisioStdXVolume"></Product>
+        <Product ID="Word2019Retail"></Product>
+        <Product ID="Word2019Volume"></Product>
+        <Product ID="WordRetail"></Product>
+    </Remove>
+    <Display Level="None" AcceptEULA="TRUE" />
+</Configuration>
