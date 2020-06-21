@@ -6,5 +6,7 @@ trigger:
 extends:
   template: ../.azure-pipelines/templates/choco_build_and_publish_nuget_package.yml
   parameters:
-    package: microsoft-office-click-to-run
-    version: 1.0.0
+    packageName: microsoft-office-click-to-run
+    packageVersion: 1.0.0
+    skipTest: true #testArgs: --params /configuration-xml-file:./microsoft-office-click-to-run/tools/configuration_install_example.xml
+    pushToCommunityFeed: false

@@ -4,7 +4,7 @@
   <metadata>
     <!-- Required NuGet properties -->
     <id>microsoft-office-deployment-tool</id>
-    <version>0.0</version><!-- Version set in azure-pipelines.yml -->
+    <version>0.0-dev</version><!-- Version set in azure-pipelines.yml -->
     <authors>Microsoft</authors>
     <description>
       This will only install the Microsoft Office Deployment Tool (also known as the "Click-to-Run Administrator Tool").

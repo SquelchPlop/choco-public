@@ -6,5 +6,6 @@ trigger:
 extends:
   template: ../.azure-pipelines/templates/choco_build_and_publish_nuget_package.yml
   parameters:
-    package: microsoft-office-deployment-tool
-    version: 16.0.12827.20258
+    packageName: microsoft-office-deployment-tool
+    packageVersion: 16.0.12827.20258
+    pushToCommunityFeed: true

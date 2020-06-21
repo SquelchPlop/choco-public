@@ -1,39 +1,90 @@
 parameters:
-  - name: package
+  - name: packageName
     type: string
-  - name: version
+  - name: packageVersion
     type: string
+  - name: skipTest # If set to true, the Test_Choco job will not run
+    type: boolean
+    default: False
+  - name: testArgs # Additional arguments to use when installing the package
+    type: string
+    default: ""
+  - name: pushToCommunityFeed # If set to true, will push to the Chocolatey community feed on master branches.  The variable group "Chocolatey"'s API key "chocolatey_community_feed_api_key" will be used.
+    type: boolean
+    default: false
 
 variables:
-  ${{ if eq(variables['Build.SourceBranchName'], 'master') }}:
-    versionSuffix: ""
-  ${{ if ne(variables['Build.SourceBranchName'], 'master') }}:
-    buildCounter: $[counter(format('{0}-dev', parameters['version']), 1)]
-    versionSuffix: "-dev$(buildCounter)"
+  - group: Chocolatey # Make all variables in the Chocolatey Variable Group available.
+  - name: dependencyArtifactFeeds # If installing a package requires a dependency, look here for dependencies.  For multiple feeds, use a colon to separate.
+    value: https://pkgs.dev.azure.com/SquelchPlop/choco-public/_packaging/choco-public/nuget/v2
+  - name: isMaster
+    value: $[eq(variables['Build.SourceBranchName'], 'master')]
+  - name: buildCounter
+    value: $[counter(format('{0}-{1}', '${{ parameters.packageVersion }}', variables['isMaster']), 1)] #Counts the number of non-master/master builds of this version
 
-jobs:
-  - job: Build_Choco
-    pool:
-      vmImage: 'windows-latest'
-    steps:
-      - script: choco pack ../${{ parameters.package }}/${{ parameters.package }}.nuspec --version ${{parameters.version}}${{variables.versionSuffix}}
-        workingDirectory: $(Build.ArtifactStagingDirectory)
-        displayName: Choco Pack
-      - publish: "./_build/"
-        artifact: NuGetPackage
+stages:
+  - stage: Build_and_Test_Choco
+    jobs:
+      - job: Build_Choco
+        pool:
+          vmImage: 'windows-latest'
+        steps:
+          - powershell: |
+              Write-Host "Is master branch?: $(isMaster)"
+              if($(isMaster)){
+                $version = "${{ parameters.packageVersion}}" # If master branch, version should be set to the version specified exactly
+              }else{
+                $version = "${{ parameters.packageVersion}}-pre$(buildCounter)" # If not master branch, version should have -pre{n} appended, where {n} increments on each build.
+              }
+              Write-Host "##vso[build.updatebuildnumber]$version"
+              choco pack $(Build.SourcesDirectory)/${{ parameters.packageName }}/${{ parameters.packageName }}.nuspec --version $version
+            workingDirectory: $(Build.ArtifactStagingDirectory)
+            displayName: Choco Pack
+          - task: PublishPipelineArtifact@1
+            inputs:
+              artifactName: NuGetPackage
+              targetPath: $(Build.ArtifactStagingDirectory)
 
-  - job: Publish_Choco
-    dependsOn: Build_Choco
-    steps:
-      - task: DownloadPipelineArtifact@2
-        inputs:
-          artifact: NuGetPackage
-          targetPath: $(Build.ArtifactStagingDirectory)
-      - task: NuGetAuthenticate@0
-        displayName: 'NuGet Authenticate'
-      - task: NuGetCommand@2
-        displayName: 'NuGet Push'
-        inputs:
-          command: push
-          publishVstsFeed: 'choco-public/choco-public'
-          allowPackageConflicts: true
+      - job: Test_Choco
+        dependsOn: Build_Choco
+        condition: and(succeeded(), not(${{ parameters.skipTest }}))
+        pool:
+          vmImage: 'windows-latest'
+        steps:
+          - task: DownloadPipelineArtifact@2
+            inputs:
+              artifact: NuGetPackage
+              targetPath: $(Build.ArtifactStagingDirectory)
+          - task: NuGetAuthenticate@0
+            displayName: 'NuGet Authenticate'
+          - powershell: choco install ${{ parameters.packageName }} -dv -s "'.;$(dependencyArtifactFeeds)'" --pre -y ${{ parameters.testArgs }}
+            workingDirectory: $(Build.ArtifactStagingDirectory)
+            displayName: Choco Install
+
+  - stage: Publish_Choco
+    dependsOn: Build_and_Test_Choco
+    condition: notIn(variables['Build.Reason'], 'Schedule', 'PullRequest')
+    jobs:
+      - job: Push
+        pool:
+          vmImage: 'windows-latest'
+        steps:
+          - task: DownloadPipelineArtifact@2
+            inputs:
+              artifact: NuGetPackage
+              targetPath: $(Build.ArtifactStagingDirectory)
+          - task: NuGetAuthenticate@0
+            displayName: 'NuGet Authenticate'
+          - task: NuGetCommand@2
+            displayName: 'NuGet Push'
+            inputs:
+              command: push
+              publishVstsFeed: 'choco-public/choco-public'
+              allowPackageConflicts: true
+          - powershell: choco push --source=https://push.chocolatey.org/ --api-key=$env:API_KEY
+            displayName: 'Choco Community Push'
+            workingDirectory: $(Build.ArtifactStagingDirectory)
+            condition: and(${{ parameters.pushToCommunityFeed }}, eq(variables['isMaster'], 'True'))
+            env:
+              API_KEY: $(chocolatey_community_feed_api_key) # Maps the community_feed_api_key secret variable to the API_KEY env variable in the script.
+
