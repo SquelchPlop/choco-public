@@ -1,3 +1,23 @@
+# 1. Builds a Chocolatey package for a .nuspec file in this repostiory.
+#   - Path to the .nuspec file is determined from the package name.
+#     - E.g. for the packageName "microsoft-office-deployment-tool", the package will be
+#       built from microsoft-office-deployment-tool/microsoft-office-deployment-tool.nuspec.
+#   - If this is a build on the master branch, the version of the package is set to exactly
+#     the same version set by the `packageVersion` parameter.
+#   - If this isn't a build from the master branch, the version of the package is set as a
+#     pre-release, by appending `-pre{n}` to the end of the `packageVersion`.
+#
+# 2. Tests the built Chocolatey package.
+#   - Installs the package using any dependency sources, as well as any arguments needed.
+#   - Uninstalls the package
+#   - If either of the above fails, the test will fail.
+#
+# 3. Publishes the Chocolatey package.
+#   - Provided there are no test failures, the package will be pushed to the Azure 
+#     Artifacts NuGet feed.
+#   - If specified, the package will be pushed to the Chocolatey community repository too.
+#     - The API key for this must be specified in you "Chocolatey" variable group in AzDO.
+
 parameters:
   - name: packageName
     type: string
@@ -9,14 +29,15 @@ parameters:
   - name: testArgs # Additional arguments to use when installing the package
     type: string
     default: ""
+  - name: dependencyArtifactFeeds # If installing a package requires a dependency, look here for dependencies.  For multiple feeds, use a colon to separate.
+    type: string
+    default: https://pkgs.dev.azure.com/SquelchPlop/choco-public/_packaging/choco-public/nuget/v2
   - name: pushToCommunityFeed # If set to true, will push to the Chocolatey community feed on master branches.  The variable group "Chocolatey"'s API key "chocolatey_community_feed_api_key" will be used.
     type: boolean
     default: false
 
 variables:
   - group: Chocolatey # Make all variables in the Chocolatey Variable Group available.
-  - name: dependencyArtifactFeeds # If installing a package requires a dependency, look here for dependencies.  For multiple feeds, use a colon to separate.
-    value: https://pkgs.dev.azure.com/SquelchPlop/choco-public/_packaging/choco-public/nuget/v2
   - name: isMaster
     value: $[eq(variables['Build.SourceBranchName'], 'master')]
   - name: buildCounter
@@ -57,7 +78,9 @@ stages:
               targetPath: $(Build.ArtifactStagingDirectory)
           - task: NuGetAuthenticate@0
             displayName: 'NuGet Authenticate'
-          - powershell: choco install ${{ parameters.packageName }} -dv -s "'.;$(dependencyArtifactFeeds)'" --pre -y ${{ parameters.testArgs }}
+          - powershell: |
+              choco install ${{ parameters.packageName }} -dv -s "'.;${{ parameters.dependencyArtifactFeeds }}'" --pre -y ${{ parameters.testArgs }}
+              choco uninstall ${{ parameters.packageName }}
             workingDirectory: $(Build.ArtifactStagingDirectory)
             displayName: Choco Install
 
