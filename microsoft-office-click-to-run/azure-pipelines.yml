@@ -9,5 +9,5 @@ extends:
     packageLocation: repo://microsoft-office-click-to-run
     packageName: microsoft-office-click-to-run
     packageVersion: 1.0.0
-    installArgs: --params /configuration-xml-file:./microsoft-office-click-to-run/tools/configuration_install_example.xml
+    installArgs: --params /configuration-xml-file:$(Build.SourcesDirectory)\microsoft-office-click-to-run\tools\configuration_install_example.xml
     pushToCommunityFeed: False
