@@ -4,8 +4,9 @@ trigger:
       - microsoft-office-deployment-tool/*
 
 extends:
-  template: ../.azure-pipelines/templates/choco_build_and_publish_nuget_package.yml
+  template: ../.azure-pipelines/templates/choco_pack_test_publish_nuget_package.yml
   parameters:
+    packageLocation: repo://microsoft-office-deployment-tool
     packageName: microsoft-office-deployment-tool
     packageVersion: 16.0.12827.20258
-    pushToCommunityFeed: true
+    pushToCommunityFeed: False

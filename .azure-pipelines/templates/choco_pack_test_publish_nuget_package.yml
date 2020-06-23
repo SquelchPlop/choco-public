@@ -1,0 +1,182 @@
+parameters:
+  #Pack params
+  - name: packageLocation #E.g. https://chocolatey.org/api/v2 for a remote NuGet store, or repo://microsoft-edge/ for the microsoft-edge directory in this repo.
+    type: string
+  - name: packageName
+    type: string
+  - name: packageVersion
+    type: string
+    default: "" #If left blank, the version is determined from the .nuspec file.  If the packageLocation is https (external), leaving this blank will download the latest version.
+
+  #Test params
+  - name: skipTest # If set to true, the Test job will not run
+    type: boolean
+    default: False
+  - name: installArgs # Additional arguments to use when installing the package for testing
+    type: string
+    default: ""
+  - name: installArtifactFeedDependencies # If installing a package requires a dependency, look here for dependencies.  For multiple feeds, use a colon to separate.
+    type: string
+    default: "https://pkgs.dev.azure.com/SquelchPlop/choco-public/_packaging/choco-public/nuget/v2"
+  - name: postInstallTestScript # Will run the powershell script specified after installation
+    type: string
+    default: False
+  - name: postUninstallTestScript # Will the powershell script specified after uninstallation
+    type: string
+    default: False
+
+  #Publish params
+  - name: pushToCommunityFeed # If set to true, will push to the Chocolatey community feed on master branches.  The variable group "Chocolatey"'s API key "chocolatey_community_feed_api_key" will be used.
+    type: boolean
+    default: False
+
+variables:
+  - group: Chocolatey # Make all variables in the Chocolatey Variable Group available.
+  - name: isMaster
+    value: $[eq(variables['Build.SourceBranchName'], 'master')]
+  - name: buildCounter
+    value: $[counter(format('{0}-{1}', '${{ parameters.packageVersion }}', variables['isMaster']), 1)] #Counts the number of non-master/master builds of this version
+
+stages:
+  - stage: Pack_and_Test
+    jobs:
+      - job: Pack
+        pool:
+          vmImage: 'windows-latest'
+        steps:
+          - powershell: |
+              Write-Host "Creating a directory for storing the raw, unbuilt/uncompiled/unpacked package"
+              New-Item -ItemType Directory -Path .\raw_package
+
+              Write-Host "Package location is ${{ parameters.packageLocation }}"
+
+              if("${{ parameters.packageLocation }}".StartsWith("https://")){
+                  Write-Host "##[group]HTTPS package location (package location is a remote NuGet store)"
+
+                  Write-Host "Downloading package from ${{ parameters.packageLocation }}/package/${{ parameters.packageName}}/${{ parameters.packageVersion}}"
+                  Invoke-WebRequest -Uri "${{ parameters.packageLocation }}/package/${{ parameters.packageName}}/${{ parameters.packageVersion}}" -UseBasicParsing -OutFile ./temp_download.zip
+                  Write-Host "Extracting downloaded package to .\raw_package"
+                  Expand-Archive -Path .\temp_download.zip -DestinationPath .\raw_package
+
+                  Write-Host "Cleaning the extracted package (see https://chocolatey.org/docs/how-to-recompile-packages)"
+                  cd .\raw_package
+                  Remove-Item -Path _rels -Recurse
+                  Remove-Item -Path package -Recurse
+                  Remove-Item -Path "*Content_Types*.xml"
+
+                  Write-Host "##[endgroup]"
+              }elseif("${{ parameters.packageLocation }}".StartsWith("repo://")){
+                  Write-Host "##[group]REPO package location (package location is in this GitHub repo)"
+
+                  Write-Host "Copying the package from the repo to .\raw_package"
+                  $repoLocation = "${{ parameters.packageLocation }}".trimstart("repo://")
+                  Copy-Item -Path "$(Build.SourcesDirectory)\$repoLocation\*" -Destination .\raw_package\ -Recurse -Verbose -Force
+                  Write-Host "##[endgroup]"
+              }else{
+                  throw "Didn't recognise the package location.  Must be either https:// or repo://!"
+              }
+            displayName: Source into .\raw_package
+
+          - powershell: |
+              #If the package version has been left blank, detect the version from the .nuspec file
+              if("${{ parameters.packageVersion}}" -eq ""){
+                Write-Host "Package version wasn't specified, so loading the version from the .nuspec file."
+                $xml = [xml](Get-Content .\raw_package\*.nuspec)
+                $version = $xml.package.metadata.version
+              }else{
+                Write-Host "Package version was specified to this pipeline as a parameter as ${{ parameters.packageVersion }}, so using that."
+                $version = "${{ parameters.packageVersion }}"
+              }
+
+              #If not master branch, version should have -pre{n} appended, where {n} increments on each build.
+              if("$(isMaster)" -eq "False"){
+                Write-Host "This is not a build from the master branch, so appending '-pre{n}' to the version."
+                $version = "$version-pre$(buildCounter)" 
+              }
+              Write-Host "Determined $version as the version to use for this package!"
+              Write-Host "##vso[build.updatebuildnumber]$version"
+            displayName: Set Version
+
+          - powershell: Write-Output "TODO"
+            displayName: Internalize
+            condition: False
+
+          - powershell: |
+              Write-Host "Switching into the raw_package directory.  Directory contents:"
+              cd raw_package; ls
+              
+              Write-Host "Running Choco Pack.  The package's version will be $(Build.BuildNumber)"
+              Write-Host "The package's .nuspec is: $(Get-Content *.nuspec)"
+              choco pack --version $(Build.BuildNumber) --outputdirectory $(Build.ArtifactStagingDirectory)
+              Write-Host "Choco Pack complete!"
+            displayName: Choco Pack
+
+          - task: PublishPipelineArtifact@1
+            inputs:
+              artifactName: NuGetPackage
+              targetPath: $(Build.ArtifactStagingDirectory)
+
+      - job: Test
+        dependsOn: Pack
+        condition: and(succeeded(), not(${{ parameters.skipTest }}))
+        pool:
+          vmImage: 'windows-latest'
+        steps:
+          - task: DownloadPipelineArtifact@2
+            inputs:
+              artifact: NuGetPackage
+              targetPath: $(Build.ArtifactStagingDirectory)
+          
+          - task: NuGetAuthenticate@0
+            displayName: 'NuGet Authenticate'
+          
+          - powershell: choco install "${{ parameters.packageName }}.$(Build.BuildNumber).nupkg" -dvyf --pre --source="'.;${{ parameters.installArtifactFeedDependencies }}'"  ${{ parameters.installArgs }}
+            displayName: Choco Install
+            workingDirectory: $(Build.ArtifactStagingDirectory)
+
+          - powershell: |
+              Write-Host "Post-install test script detected as ${{ parameters.postInstallTestScript }}"
+              $cleanLocation = "$(Build.SourcesDirectory)\" + "${{ parameters.postInstallTestScript }}".trimstart("repo://")
+              Write-Host "Validating post-install test script path as $cleanLocation and running"
+              if(Test-Path $cleanLocation){& "$cleanLocation"}else{throw "Post-install script location isn't valid!"}
+            displayName: Run Post-Install Test Script
+            condition: ne('${{ parameters.postInstallTestScript }}', 'False')
+
+          - powershell: choco uninstall ${{ parameters.packageName }} -dvyf
+            displayName: Choco Uninstall
+
+          - powershell: |
+              Write-Host "Post-uninstall test script detected as ${{ parameters.postUninstallTestScript }}"
+              $cleanLocation = "$(Build.SourcesDirectory)\" + "${{ parameters.postUninstallTestScript }}".trimstart("repo://")
+              Write-Host "Validating post-uninstall test script path as $cleanLocation and running"
+              if(Test-Path $cleanLocation){& "$cleanLocation"}else{throw "Post-uninstall script location isn't valid!"}
+            displayName: Run Post-Uninstall Test Script
+            condition: ne('${{ parameters.postUninstallTestScript }}', 'False')
+
+  - stage: Publish
+    dependsOn: Pack_and_Test
+    condition: and(succeeded(), notIn(variables['Build.Reason'], 'Schedule', 'PullRequest'))
+    jobs:
+      - job: Push
+        pool:
+          vmImage: 'windows-latest'
+        steps:
+          - task: DownloadPipelineArtifact@2
+            inputs:
+              artifact: NuGetPackage
+              targetPath: $(Build.ArtifactStagingDirectory)
+          - task: NuGetAuthenticate@0
+            displayName: 'NuGet Authenticate'
+          - task: NuGetCommand@2
+            displayName: 'NuGet choco-public Push'
+            inputs:
+              command: push
+              publishVstsFeed: 'choco-public/choco-public'
+              allowPackageConflicts: true
+          - powershell: choco push --source=https://push.chocolatey.org/ --api-key=$env:API_KEY
+            displayName: 'Choco Community Push'
+            workingDirectory: $(Build.ArtifactStagingDirectory)
+            condition: and(${{ parameters.pushToCommunityFeed }}, eq(variables['isMaster'], 'True'))
+            env:
+              API_KEY: $(chocolatey_community_feed_api_key) # Maps the community_feed_api_key secret variable to the API_KEY env variable in the script.
+

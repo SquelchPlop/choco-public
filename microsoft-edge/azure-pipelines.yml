@@ -1,0 +1,16 @@
+trigger:
+  paths:
+    include:
+      - microsoft-edge/*
+
+extends:
+  template: ../.azure-pipelines/templates/choco_pack_test_publish_nuget_package.yml
+  parameters:
+    packageLocation: https://chocolatey.org/api/v2 #Download this package from Choco community repository
+    packageName: microsoft-edge
+    packageVersion: "" #Setting to blank will download use the latest version available from the packageLocation
+    skipTest: False #Don't skip installation/uninstallation tests
+    installArgs: --ia "DONOTCREATEDESKTOPSHORTCUT=true" #Extra args to pass to the installer during installation test
+    postInstallTestScript: False #No script to run after install
+    postUninstallTestScript: repo://microsoft-edge/post-uninstall-test.ps1 #Runs after uninstallation
+    pushToCommunityFeed: False #Don't push to the Chocolatey community feed
