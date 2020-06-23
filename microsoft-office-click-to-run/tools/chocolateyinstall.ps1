@@ -6,6 +6,10 @@ if (!$pp["configuration-xml-file"]) {
   throw "Package needs parameter 'configuration-xml-file' to install, that must be provided in params or in prompt." 
 }
 
+if (-not(Test-Path($pp["configuration-xml-file"]))){
+  throw "The configuration XML file provided couldn't be found.  Is the path correct?"
+}
+
 $packageArgs = @{
   packageName    = $env:ChocolateyPackageName
   softwareName   = "microsoft.*(365|office)"
