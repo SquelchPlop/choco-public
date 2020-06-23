@@ -130,7 +130,10 @@ stages:
           - task: NuGetAuthenticate@0
             displayName: 'NuGet Authenticate'
           
-          - powershell: choco install "${{ parameters.packageName }}.$(Build.BuildNumber).nupkg" -dvyf --pre --source="'.;${{ parameters.installArtifactFeedDependencies }}'"  ${{ parameters.installArgs }}
+          - powershell: |
+              Write-Host "Recognised packages in this directory:"
+              choco list --pre --source="."
+              choco install ${{ parameters.packageName }} --version $(Build.BuildNumber) -dvyf --pre --source ".;${{ parameters.installArtifactFeedDependencies }}"  ${{ parameters.installArgs }}
             displayName: Choco Install
             workingDirectory: $(Build.ArtifactStagingDirectory)
 
