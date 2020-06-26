@@ -25,3 +25,22 @@ $packageArgs = @{
 }
 
 Install-ChocolateyPackage @packageArgs
+
+if ($pp["kms"]) {
+  switch([int]$pp["kms"]){
+    #Enables KMS activation.  Note - you must have a licensed KMS server available to use this.  VL is only supported up to Office 2019 - see https://docs.microsoft.com/en-us/deployoffice/vlactivation/activate-office-by-using-kms
+    #The keys below are GVLKs - https://docs.microsoft.com/en-us/deployoffice/vlactivation/gvlks. 
+    2016{
+      foreach ($file in (Get-Item "$env:ProgramFiles\Microsoft Office\root\Licenses16\proplusvl_kms*.xrm-ms").FullName){
+        & cscript "$env:ProgramFiles\Microsoft Office\Office16\ospp.vbs" /inslic:"$file"
+      }
+      & cscript "$env:ProgramFiles\Microsoft Office\Office16\ospp.vbs" /inpkey:XQNVK-8JYDB-WJ9W3-YJ8YR-WFG99
+    }
+    2019{
+      foreach ($file in (Get-Item "$env:ProgramFiles\Microsoft Office\root\Licenses16\ProPlus2019VL*.xrm-ms").FullName){
+        & cscript "$env:ProgramFiles\Microsoft Office\Office16\ospp.vbs" /inslic:"$file"
+      }
+      & cscript "$env:ProgramFiles\Microsoft Office\Office16\ospp.vbs" /inpkey:NMMKJ-6RK4F-KMJVX-8D9MJ-6MWKP
+    }
+  }
+}
