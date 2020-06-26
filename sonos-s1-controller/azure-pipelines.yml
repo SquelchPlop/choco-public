@@ -9,4 +9,4 @@ extends:
     packageLocation: repo://sonos-s1-controller
     packageName: sonos-s1-controller
     packageVersion: 57.3.77280
-    pushToCommunityFeed: False
+    pushToCommunityFeed: True
