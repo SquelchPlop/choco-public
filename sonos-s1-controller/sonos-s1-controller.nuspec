@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- Do not remove this test for UTF-8: if “Ω” doesn’t appear as greek uppercase omega letter enclosed in quotation marks, you should use an editor that supports UTF-8, not this one. -->
+<package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd"><!-- Latest nuspec at https://github.com/NuGet/NuGet.Client/blob/dev/src/NuGet.Core/NuGet.Packaging/compiler/resources/nuspec.xsd -->
+  <metadata>
+    <!-- Required NuGet properties -->
+    <id>sonos-s1-controller</id>
+    <version>0.0-dev</version><!-- Version set in azure-pipelines.yml -->
+    <authors>Sonos, Inc.</authors>
+    <description>
+      This app controls systems that include the earliest Sonos products: Zone Players, Play:5 (Gen 1), Bridge, Connect (Gen 1) and Connect:Amp (Gen 1)
+
+      Easily control your system.
+
+      Adjust volume levels, group rooms, save favourites, set alarms, and more.
+
+      Stream from popular services.
+
+      Connect your streaming services and browse all your music, podcasts, radio, and audiobooks in a single app.
+
+      Listen to Sonos Radio.
+
+      Enjoy thousands of stations free on your system, including live radio from round the world, genre stations, artist-curated stations, and original programming from Sonos.
+    </description>
+    <!-- End required NuGet properties -->
+    <!-- Optional NuGet properties -->
+    <title>Sonos S1 Controller</title>
+    <owners>Matt Hadley</owners>
+    <licenseUrl>https://www.sonos.com/legal/terms</licenseUrl>
+    <projectUrl>https://support.sonos.com/s/downloads?language=en_US</projectUrl>
+    <iconUrl>https://github.com/SquelchPlop/choco-public/raw/master/sonos-s1-controller/icons/sonos-s1-controller.png</iconUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <summary>The Sonos S1 Controller app lets you control Sonos systems with products that are not compatible with S2.</summary>
+    <releaseNotes>https://support.sonos.com/s/sonos-s2-overview?language=en_US</releaseNotes>
+    <copyright>© Sonos, Inc. 2020</copyright>
+    <tags>sonos-s1-controller sonos controller s1</tags>
+    <!-- End optional NuGet properties-->
+    <!-- Custom Chocolatey properties -->
+    <packageSourceUrl>https://github.com/SquelchPlop/choco-public/tree/master/sonos-s1-controller/</packageSourceUrl>
+    <docsUrl>https://support.sonos.com/s/sonos-s2-overview?language=en_US</docsUrl>
+    <mailingListUrl>https://support.sonos.com/s/?language=en_US#contact</mailingListUrl>
+    <bugTrackerUrl>https://support.sonos.com/s/?language=en_US#contact</bugTrackerUrl>
+    <!-- End custom Chocolatey properties-->
+  </metadata>
+  <files>
+    <file src="tools\**" target="tools" />
+  </files>
+</package>
