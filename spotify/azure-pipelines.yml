@@ -10,3 +10,4 @@ extends:
     packageName: spotify
     packageVersion: 1.135.458.0
     pushToCommunityFeed: False
+    skipTest: True

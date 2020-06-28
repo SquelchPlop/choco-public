@@ -10,3 +10,4 @@ extends:
     packageName: whatsapp-desktop
     packageVersion: 2.2025.7.0
     pushToCommunityFeed: False
+    skipTest: True

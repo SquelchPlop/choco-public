@@ -24,7 +24,7 @@
     <!-- End required NuGet properties -->
     <!-- Optional NuGet properties -->
     <title>Sonos S1 Controller</title>
-    <owners>Matt Hadley</owners>
+    <owners>SquelchPlop</owners>
     <licenseUrl>https://www.sonos.com/legal/terms</licenseUrl>
     <projectUrl>https://support.sonos.com/s/downloads?language=en_US</projectUrl>
     <iconUrl>https://github.com/SquelchPlop/choco-public/raw/master/sonos-s1-controller/icons/sonos-s1-controller.png</iconUrl>

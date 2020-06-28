@@ -32,7 +32,7 @@
     <!-- End required NuGet properties -->
     <!-- Optional NuGet properties -->
     <title>Microsoft Office Click-to-Run</title>
-    <owners>Matt Hadley</owners>
+    <owners>SquelchPlop</owners>
     <licenseUrl>https://technet.microsoft.com/en-us/library/gg982959.aspx</licenseUrl>
     <projectUrl>https://office.microsoft.com/</projectUrl>
     <iconUrl>https://github.com/SquelchPlop/choco-public/raw/master/microsoft-office-click-to-run/icons/microsoft-office-click-to-run.png</iconUrl>

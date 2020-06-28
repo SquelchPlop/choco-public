@@ -15,7 +15,7 @@
     <!-- End required NuGet properties -->
     <!-- Optional NuGet properties -->
     <title>Microsoft Office Deployment Tool</title>
-    <owners>Matt Hadley</owners>
+    <owners>SquelchPlop</owners>
     <licenseUrl>https://technet.microsoft.com/en-us/library/gg982959.aspx</licenseUrl>
     <projectUrl>https://docs.microsoft.com/en-us/deployoffice/overview-office-deployment-tool</projectUrl>
     <iconUrl>https://github.com/SquelchPlop/choco-public/raw/master/microsoft-office-deployment-tool/icons/microsoft-office-deployment-tool.png</iconUrl>
