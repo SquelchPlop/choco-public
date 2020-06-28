@@ -1,0 +1,12 @@
+trigger:
+  paths:
+    include:
+      - spotify/*
+
+extends:
+  template: ../.azure-pipelines/templates/choco_pack_test_publish_nuget_package.yml
+  parameters:
+    packageLocation: repo://spotify
+    packageName: spotify
+    packageVersion: 1.135.458.0
+    pushToCommunityFeed: False

@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- Do not remove this test for UTF-8: if “Ω” doesn’t appear as greek uppercase omega letter enclosed in quotation marks, you should use an editor that supports UTF-8, not this one. -->
+<package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd"><!-- Latest nuspec at https://github.com/NuGet/NuGet.Client/blob/dev/src/NuGet.Core/NuGet.Packaging/compiler/resources/nuspec.xsd -->
+  <metadata>
+    <!-- Required NuGet properties -->
+    <id>whatsapp-desktop</id>
+    <version>0.0-dev</version><!-- Version set in azure-pipelines.yml -->
+    <authors>Facebook Inc.</authors>
+    <description>With WhatsApp on the desktop, you can seamlessly sync all of your chats to your computer so that you can chat on whatever device is most convenient to you.</description>
+    <!-- End required NuGet properties -->
+    <!-- Optional NuGet properties -->
+    <title>whatsapp-desktop</title>
+    <owners>SquelchPlop</owners>
+    <licenseUrl>https://www.whatsapp.com/legal/</licenseUrl>
+    <projectUrl>https://www.whatsapp.com/download</projectUrl>
+    <iconUrl>https://github.com/SquelchPlop/choco-public/raw/master/whatsapp-desktop/icons/whatsapp-desktop.png</iconUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <summary>With WhatsApp on the desktop, you can seamlessly sync all of your chats to your computer so that you can chat on whatever device is most convenient to you.</summary>
+    <releaseNotes>https://blog.whatsapp.com/</releaseNotes>
+    <copyright>© Facebook Inc. 2020</copyright>
+    <tags>whatsapp-desktop</tags>
+    <!-- End optional NuGet properties-->
+    <!-- Custom Chocolatey properties -->
+    <packageSourceUrl>https://github.com/SquelchPlop/choco-public/raw/master/whatsapp-desktop/</packageSourceUrl>
+    <docsUrl>https://faq.whatsapp.com/</docsUrl>
+    <mailingListUrl>https://www.whatsapp.com/contact/</mailingListUrl>
+    <bugTrackerUrl>https://www.whatsapp.com/contact/</bugTrackerUrl>
+    <!-- End custom Chocolatey properties-->
+  </metadata>
+  <files>
+    <file src="bin\**" target="bin" />
+    <file src="tools\**" target="tools" />
+  </files>
+</package>

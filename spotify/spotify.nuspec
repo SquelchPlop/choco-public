@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- Do not remove this test for UTF-8: if “Ω” doesn’t appear as greek uppercase omega letter enclosed in quotation marks, you should use an editor that supports UTF-8, not this one. -->
+<package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd"><!-- Latest nuspec at https://github.com/NuGet/NuGet.Client/blob/dev/src/NuGet.Core/NuGet.Packaging/compiler/resources/nuspec.xsd -->
+  <metadata>
+    <!-- Required NuGet properties -->
+    <id>spotify</id>
+    <version>0.0-dev</version><!-- Version set in azure-pipelines.yml -->
+    <authors>Spotify AB</authors>
+    <description>Spotify is a digital music service that gives you access to millions of songs.</description>
+    <!-- End required NuGet properties -->
+    <!-- Optional NuGet properties -->
+    <title>Spotify</title>
+    <owners>SquelchPlop</owners>
+    <licenseUrl>https://www.spotify.com/legal/end-user-agreement/</licenseUrl>
+    <projectUrl>https://www.spotify.com/uk/download/windows/</projectUrl>
+    <iconUrl>https://github.com/SquelchPlop/choco-public/raw/master/spotify/icons/spotify.png</iconUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <summary>Spotify is a digital music service that gives you access to millions of songs.</summary>
+    <releaseNotes>https://community.spotify.com/t5/Community-Blog/bg-p/spotifyct/label-name/release%20notes</releaseNotes>
+    <copyright>© Spotify AB 2020</copyright>
+    <tags>spotify</tags>
+    <!-- End optional NuGet properties-->
+    <!-- Custom Chocolatey properties -->
+    <packageSourceUrl>https://github.com/SquelchPlop/choco-public/raw/master/spotify/</packageSourceUrl>
+    <docsUrl>https://developer.spotify.com/documentation/</docsUrl>
+    <mailingListUrl>https://support.spotify.com</mailingListUrl>
+    <bugTrackerUrl>https://support.spotify.com</bugTrackerUrl>
+    <!-- End custom Chocolatey properties-->
+  </metadata>
+  <files>
+    <file src="bin\**" target="bin" />
+    <file src="tools\**" target="tools" />
+  </files>
+</package>

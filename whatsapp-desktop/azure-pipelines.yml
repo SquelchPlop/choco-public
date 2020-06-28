@@ -1,0 +1,12 @@
+trigger:
+  paths:
+    include:
+      - whatsapp-desktop/*
+
+extends:
+  template: ../.azure-pipelines/templates/choco_pack_test_publish_nuget_package.yml
+  parameters:
+    packageLocation: repo://whatsapp-desktop
+    packageName: whatsapp-desktop
+    packageVersion: 2.2025.7.0
+    pushToCommunityFeed: False
