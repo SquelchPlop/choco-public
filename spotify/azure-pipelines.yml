@@ -8,5 +8,5 @@ extends:
   parameters:
     packageLocation: repo://spotify
     packageName: spotify
-    packageVersion: 1.135.458.0.1
+    packageVersion: 1.135.458.1
     pushToCommunityFeed: False

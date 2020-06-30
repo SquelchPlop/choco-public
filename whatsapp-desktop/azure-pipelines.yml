@@ -8,5 +8,5 @@ extends:
   parameters:
     packageLocation: repo://whatsapp-desktop
     packageName: whatsapp-desktop
-    packageVersion: 2.2025.7.0.1
+    packageVersion: 2.2025.7.1
     pushToCommunityFeed: False
