@@ -44,6 +44,9 @@ stages:
         pool:
           vmImage: 'windows-latest'
         steps:
+          - checkout: self
+            lfs: true
+
           - powershell: |
               Write-Host "Creating a directory for storing the raw, unbuilt/uncompiled/unpacked package"
               New-Item -ItemType Directory -Path .\raw_package
